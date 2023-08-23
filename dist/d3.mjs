@@ -17616,7 +17616,7 @@ function arc() {
         a1 = endAngle.apply(this, arguments) - halfPi,
         da = abs(a1 - a0),
         c = (a1 - a0)/2,
-        e = (a1 + a0+2*halfPi)/2,
+        e = (a1 + a0)/2,
         cw = a1 > a0;
 
     if (!context) context = buffer = path();
