@@ -17681,7 +17681,7 @@ function arc() {
           ga01=a0+asin(gp/gr1),
           ga11=a1-asin(gp/gr1);   
           
-        console.log(gcx, gcy, gr0, ga10, ga00);
+        console.log(gcx.toFixed(4), gcy.toFixed(4), gr0.toFixed(4), ga10.toFixed(4), ga00.toFixed(4));
 
       // Apply padding? Note that since r1 ≥ r0, da1 ≥ da0.
       if (rp > epsilon) {
