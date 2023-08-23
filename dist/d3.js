@@ -17679,7 +17679,9 @@ function arc() {
           ga00=a0+asin(gp/gr0),
           ga10=a1-asin(gp/gr0),
           ga01=a0+asin(gp/gr1),
-          ga11=a1-asin(gp/gr1);          
+          ga11=a1-asin(gp/gr1);   
+          
+        console.log(gr, e, gro, gr1, gp);
 
       // Apply padding? Note that since r1 ≥ r0, da1 ≥ da0.
       if (rp > epsilon) {
@@ -17693,7 +17695,7 @@ function arc() {
         else da1 = 0, a01 = a11 = (a0 + a1) / 2;
       }
 
-      var x01 = r1 * cos(a01), // NEEDS ATTENTION
+      var x01 = r1 * cos(a01), 
           y01 = r1 * sin(a01),
           x10 = r0 * cos(a10),
           y10 = r0 * sin(a10);
@@ -17752,7 +17754,6 @@ function arc() {
       }
 
       // Or is the outer ring just a circular arc?
-      // else context.moveTo(x01, y01), context.arc(gr*Math.sin(e), gr*Math.cos(e), r1, ga01, ga11, !cw); // MODIFICATION 
       else if(gr==0) context.moveTo(x01, y01), context.arc(0, 0, r1, a01, a11, !cw);
       else context.moveTo(x01, y01), context.arc(gcx, gcy, gr1, ga01, ga11, !cw);
 
@@ -17781,7 +17782,6 @@ function arc() {
       // Or is the inner ring just a circular arc?
       else if(gr==0) context.arc(0, 0, r0, a10, a00, cw);
       else context.arc(gcx, gcy, gr0, ga10, ga00, cw);
-      // else context.arc(gr*Math.sin(e), gr*Math.cos(e), r0+gr, ga10, ga00,cw); // MODIFICATION HERE
     }
 
     context.closePath();
