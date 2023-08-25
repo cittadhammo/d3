@@ -17616,7 +17616,7 @@ function arc() {
         a1 = endAngle.apply(this, arguments) - halfPi,
         da = abs(a1 - a0),
         c = (a1 - a0)/2,
-        e = (a1 + a0)/2,
+        e = (a1 + a0+2*halfPi)/2,
         cw = a1 > a0;
 
     if (!context) context = buffer = path();
@@ -17675,7 +17675,7 @@ function arc() {
           ga01=a0+asin(gp/gr1),
           ga11=a1-asin(gp/gr1);   
           
-        console.log(gp.toFixed(4), gr.toFixed(4), e.toFixed(4), gcx.toFixed(4), gcy.toFixed(4), gr0.toFixed(4), ga10.toFixed(4), ga00.toFixed(4));
+        console.log(gp.toFixed(4), gr.toFixed(4), e.toFixed(4), gcx.toFixed(4), gcy.toFixed(4), gr0.toFixed(4), a0.toFixed(4), a1.toFixed(4), ga10.toFixed(4), ga00.toFixed(4));
 
       // Apply padding? Note that since r1 ≥ r0, da1 ≥ da0.
       if (rp > epsilon) {

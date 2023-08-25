@@ -33,33 +33,33 @@ const config = {
 
 export default [
   config,
-  {
-    ...config,
-    output: {
-      ...config.output,
-      file: `dist/${meta.name}.mjs`,
-      format: "esm"
-    }
-  },
-  {
-    ...config,
-    output: {
-      ...config.output,
-      file: `dist/${meta.name}.min.js`
-    },
-    plugins: [
-      ...config.plugins,
-      terser({
-        output: {
-          preamble: config.output.banner
-        },
-        mangle: {
-          reserved: [
-            "InternMap",
-            "InternSet"
-          ]
-        }
-      })
-    ]
-  }
+  // {
+  //   ...config,
+  //   output: {
+  //     ...config.output,
+  //     file: `dist/${meta.name}.mjs`,
+  //     format: "esm"
+  //   }
+  // },
+  // {
+  //   ...config,
+  //   output: {
+  //     ...config.output,
+  //     file: `dist/${meta.name}.min.js`
+  //   },
+  //   plugins: [
+  //     ...config.plugins,
+  //     terser({
+  //       output: {
+  //         preamble: config.output.banner
+  //       },
+  //       mangle: {
+  //         reserved: [
+  //           "InternMap",
+  //           "InternSet"
+  //         ]
+  //       }
+  //     })
+  //   ]
+  // }
 ];
