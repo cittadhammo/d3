@@ -9819,7 +9819,7 @@ var degrees = 180 / pi$1;
 var radians = pi$1 / 180;
 
 var abs$1 = Math.abs;
-var atan = Math.atan;
+var atan$1 = Math.atan;
 var atan2$1 = Math.atan2;
 var cos$1 = Math.cos;
 var ceil = Math.ceil;
@@ -10882,7 +10882,7 @@ function clipAntimeridianIntersect(lambda0, phi0, lambda1, phi1) {
       cosPhi1,
       sinLambda0Lambda1 = sin$1(lambda0 - lambda1);
   return abs$1(sinLambda0Lambda1) > epsilon$1
-      ? atan((sin$1(phi0) * (cosPhi1 = cos$1(phi1)) * sin$1(lambda1)
+      ? atan$1((sin$1(phi0) * (cosPhi1 = cos$1(phi1)) * sin$1(lambda1)
           - sin$1(phi1) * (cosPhi0 = cos$1(phi0)) * sin$1(lambda0))
           / (cosPhi0 * cosPhi1 * sinLambda0Lambda1))
       : (phi0 + phi1) / 2;
@@ -12601,7 +12601,7 @@ function mercatorRaw(lambda, phi) {
 }
 
 mercatorRaw.invert = function(x, y) {
-  return [x, 2 * atan(exp(y)) - halfPi$1];
+  return [x, 2 * atan$1(exp(y)) - halfPi$1];
 };
 
 function mercator() {
@@ -12668,7 +12668,7 @@ function conicConformalRaw(y0, y1) {
       l = atan2$1(x, abs$1(fy)) * sign$1(fy);
     if (fy * n < 0)
       l -= pi$1 * sign$1(x) * sign$1(fy);
-    return [l / n, 2 * atan(pow$1(f / r, 1 / n)) - halfPi$1];
+    return [l / n, 2 * atan$1(pow$1(f / r, 1 / n)) - halfPi$1];
   };
 
   return project;
@@ -12759,7 +12759,7 @@ function gnomonicRaw(x, y) {
   return [cy * sin$1(x) / k, sin$1(y) / k];
 }
 
-gnomonicRaw.invert = azimuthalInvert(atan);
+gnomonicRaw.invert = azimuthalInvert(atan$1);
 
 function gnomonic() {
   return projection(gnomonicRaw)
@@ -12891,7 +12891,7 @@ function stereographicRaw(x, y) {
 }
 
 stereographicRaw.invert = azimuthalInvert(function(z) {
-  return 2 * atan(z);
+  return 2 * atan$1(z);
 });
 
 function stereographic() {
@@ -12905,7 +12905,7 @@ function transverseMercatorRaw(lambda, phi) {
 }
 
 transverseMercatorRaw.invert = function(x, y) {
-  return [-y, 2 * atan(exp(x)) - halfPi$1];
+  return [-y, 2 * atan$1(exp(x)) - halfPi$1];
 };
 
 function transverseMercator() {
@@ -17472,6 +17472,7 @@ function constant$1(x) {
 
 const abs = Math.abs;
 const atan2 = Math.atan2;
+const atan = Math.atan;
 const cos = Math.cos;
 const max = Math.max;
 const min = Math.min;
@@ -17525,24 +17526,16 @@ function arcEndAngle(d) {
   return d.endAngle;
 }
 
-function arcGPadAngle(d) {
-  return d && d.gPadAngle; // Note: optional! Groupe Padding
-}
-
-function arcGR(d) {
-  return d && d.gr; // Note: optional! Groupe Padding radius
-}
-
 function arcPadAngle(d) {
   return d && d.padAngle; // Note: optional!
 }
 
-function arcStartPadAngle(d) {
-  return d && d.startPadAngle; // Note: if d.startPadAngle not defined, then is equal to d.padAngle
+function arcAltCX(d) {
+  return d && d.altCX; // Note: optional!
 }
 
-function arcEndPadAngle(d) {
-  return d && d.endPadAngle; // Note: if d.endPadAngle not defined, then is equal to d.padAngle
+function arcAltCY(d) {
+  return d && d.altCY; // Note: optional!
 }
 
 function intersect(x0, y0, x1, y1, x2, y2, x3, y3) {
@@ -17604,11 +17597,9 @@ function arc() {
       padRadius = null,
       startAngle = arcStartAngle,
       endAngle = arcEndAngle,
-      gPadAngle = arcGPadAngle,
-      gR = arcGR,
       padAngle = arcPadAngle,
-      startPadAngle = arcStartPadAngle,
-      endPadAngle = arcEndPadAngle,
+      altCX = arcAltCX,
+      altCY = arcAltCY,
       context = null,
       path = withPath(arc);
 
@@ -17617,12 +17608,9 @@ function arc() {
         r,
         r0 = +innerRadius.apply(this, arguments),
         r1 = +outerRadius.apply(this, arguments),
-        //gpa = (gPadAngle.apply(this, arguments)>epsilon) ? gPadAngle.apply(this, arguments) : 0,
         a0 = startAngle.apply(this, arguments) - halfPi,
         a1 = endAngle.apply(this, arguments) - halfPi,
         da = abs(a1 - a0),
-        c = (a1 - a0)/2,
-        e = (a1 + a0+2*halfPi)/2,
         cw = a1 > a0;
 
     if (!context) context = buffer = path();
@@ -17651,59 +17639,59 @@ function arc() {
           a10 = a1,
           da0 = da,
           da1 = da,
-          gr = (gR.apply(this, arguments)>epsilon) ? gR.apply(this, arguments) : 0,
-          gp = (gPadAngle.apply(this, arguments)>epsilon) ? gPadAngle.apply(this, arguments) / 2 : 0,
-          ap = (padAngle.apply(this, arguments)>epsilon) ? padAngle.apply(this, arguments) / 2 : 0,
-          aps = (startPadAngle.apply(this, arguments)>epsilon) ? startPadAngle.apply(this, arguments) / 2 : ap,
-          ape = (endPadAngle.apply(this, arguments)>epsilon) ? endPadAngle.apply(this, arguments) / 2 : ap,
-          rp = (ap > epsilon || aps > epsilon || ape > epsilon ) && (padRadius ? +padRadius.apply(this, arguments) : sqrt(r0 * r0 + r1 * r1)),
+          ap = padAngle.apply(this, arguments) / 2,
+          gcx = altCX.apply(this, arguments),
+          gcy = altCY.apply(this, arguments),
+          rp = (ap > epsilon) && (padRadius ? +padRadius.apply(this, arguments) : sqrt(r0 * r0 + r1 * r1)),
           rc = min(abs(r1 - r0) / 2, +cornerRadius.apply(this, arguments)),
           rc0 = rc,
           rc1 = rc,
           t0,
           t1;
 
-      // if gp is define it redefine gr
+      // Calculation for Group Padding 
+      const 
+      gr = sqrt(gcx*gcx + gcy*gcy),
+      gr0 = r0 + gr,
+      gr1 = r1 + gr,
+      ac = atan(gcx/gcy),
 
-      if (gp > epsilon) {
-        gp = rp *  Math.sin(gp),
-        gr = gp /  Math.sin(c);
-      }
+      gb00 = halfPi - a0 -ac,
+      gc00 = asin(gr/gr0*sin(gb00)),
+      ga00 = halfPi-gb00-gc00-ac,
 
-      // Calculation for Groupe Padding using gr
-      var gcx = -gr * sin(e),
-          gcy = gr * cos(e),
-          gr0 = r0,
-          gr1 = r1+gr,
-          gp= gr*sin(c),
-          ga00=a0+asin(gp/gr0),
-          ga10=a1-asin(gp/gr0),
-          ga01=a0+asin(gp/gr1),
-          ga11=a1-asin(gp/gr1);   
-          
-        console.log(gp.toFixed(4), gr.toFixed(4), e.toFixed(4), gcx.toFixed(4), gcy.toFixed(4), gr0.toFixed(4), a0.toFixed(4), a1.toFixed(4), ga10.toFixed(4), ga00.toFixed(4));
+      gb10 = halfPi - a1 -ac,
+      gc10 = asin(gr/gr0*sin(gb10)),
+      ga10 = halfPi-gb10-gc10-ac,
+
+      gb01 = halfPi - a0 -ac,
+      gc01 = asin(gr/gr1*sin(gb01)),
+      ga01 = halfPi-gb01-gc01-ac,
+      ga01x = gcx + gr1 * cos(ga01),
+      ga01y = gcy + gr1 * sin(ga01),
+
+      gb11 = halfPi - a1 -ac,
+      gc11 = asin(gr/gr1*sin(gb11)),
+      ga11 = halfPi-gb11-gc11-ac;
+               
+      if (gcx && gcy) context.moveTo(gcx+20, gcy),context.arc(gcx, gcy, 20, 0, Math.PI * 2);
+      else context.moveTo(0+10, 0),context.arc(0, 0, 10, 0, Math.PI * 2);
+      console.log(gr, gr0, gr1, ac, gb00, gc00, ga00);
 
       // Apply padding? Note that since r1 ≥ r0, da1 ≥ da0.
       if (rp > epsilon) {
-        var p0s = asin(rp / r0 * sin(aps)),
-            p0e = asin(rp / r0 * sin(ape)),
-            p1s = asin(rp / r1 * sin(aps)),
-            p1e = asin(rp / r1 * sin(ape));
-        if ((da0 -= p0s+p0e) > epsilon) p0s *= (cw ? 1 : -1), a00 += p0s, a10 -= p0e;
+        var p0 = asin(rp / r0 * sin(ap)),
+            p1 = asin(rp / r1 * sin(ap));
+        if ((da0 -= p0 * 2) > epsilon) p0 *= (cw ? 1 : -1), a00 += p0, a10 -= p0;
         else da0 = 0, a00 = a10 = (a0 + a1) / 2;
-        if ((da1 -= p1s+p1e) > epsilon) p1s *= (cw ? 1 : -1), a01 += p1s, a11 -= p1e;
+        if ((da1 -= p1 * 2) > epsilon) p1 *= (cw ? 1 : -1), a01 += p1, a11 -= p1;
         else da1 = 0, a01 = a11 = (a0 + a1) / 2;
       }
 
-      var x01 = r1 * cos(a01), 
+      var x01 = r1 * cos(a01),
           y01 = r1 * sin(a01),
           x10 = r0 * cos(a10),
           y10 = r0 * sin(a10);
-
-      // context.moveTo(0+10, 0);
-      // context.arc(0, 0, 10, 0, Math.PI * 2);
-      // context.moveTo(gcx+20, gcy);
-      // context.arc(gcx, gcy, 20, 0, Math.PI * 2);
 
       // Apply rounded corners?
       if (rc > epsilon) {
@@ -17754,8 +17742,10 @@ function arc() {
       }
 
       // Or is the outer ring just a circular arc?
-      else if(gr==0) context.moveTo(x01, y01), context.arc(0, 0, r1, a01, a11, !cw);
-      else context.moveTo(x01, y01), context.arc(gcx, gcy, gr1, ga01, ga11, !cw);
+      //else context.moveTo(x01, y01), context.arc(0, 0, r1, a01, a11, !cw);
+      //else if(gcx && gcy) context.moveTo(0,0), context.lineTo(ga01x, ga01y), context.arc(gcx, gcy, gr1, ga01, ga11, !cw);
+      else if(gcx && gcy) context.moveTo(ga01x, ga01y), context.arc(gcx, gcy, gr1, ga01, ga11, !cw);
+      else context.moveTo(x01, y01), context.arc(0, 0, r1, a01, a11, !cw);
 
       // Is there no inner ring, and it’s a circular sector?
       // Or perhaps it’s an annular sector collapsed due to padding?
@@ -17780,8 +17770,9 @@ function arc() {
       }
 
       // Or is the inner ring just a circular arc?
-      else if(gr==0) context.arc(0, 0, r0, a10, a00, cw);
-      else context.arc(gcx, gcy, gr0, ga10, ga00, cw);
+      //else context.arc(0, 0, r0, a10, a00, cw);
+      else if(gcx && gcy) context.arc(gcx, gcy, gr0, ga10, ga00, cw);
+      else context.arc(0, 0, r0, a10, a00, cw);
     }
 
     context.closePath();
@@ -17819,26 +17810,18 @@ function arc() {
     return arguments.length ? (endAngle = typeof _ === "function" ? _ : constant$1(+_), arc) : endAngle;
   };
 
-  arc.gPadAngle = function(_) {
-    return arguments.length ? (gPadAngle = typeof _ === "function" ? _ : constant$1(+_), arc) : gPadAngle;
-  };
-
-  arc.gR = function(_) {
-    return arguments.length ? (gR = typeof _ === "function" ? _ : constant$1(+_), arc) : gR;
-  };
-
   arc.padAngle = function(_) {
     return arguments.length ? (padAngle = typeof _ === "function" ? _ : constant$1(+_), arc) : padAngle;
   };
-  
-   arc.startPadAngle = function(_) {
-    return arguments.length ? (startPadAngle = typeof _ === "function" ? _ : constant$1(+_), arc) : startPadAngle;
-  };
-  
-   arc.endPadAngle = function(_) {
-    return arguments.length ? (endPadAngle = typeof _ === "function" ? _ : constant$1(+_), arc) : endPadAngle;
+
+  arc.altCX = function(_) {
+    return arguments.length ? (altCX = typeof _ === "function" ? _ : constant$1(+_), arc) : altCX;
   };
 
+  arc.altCY = function(_) {
+    return arguments.length ? (altCY = typeof _ === "function" ? _ : constant$1(+_), arc) : altCY;
+  };
+  
   arc.context = function(_) {
     return arguments.length ? ((context = _ == null ? null : _), arc) : context;
   };
