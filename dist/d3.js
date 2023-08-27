@@ -9819,7 +9819,7 @@ var degrees = 180 / pi$1;
 var radians = pi$1 / 180;
 
 var abs$1 = Math.abs;
-var atan$1 = Math.atan;
+var atan = Math.atan;
 var atan2$1 = Math.atan2;
 var cos$1 = Math.cos;
 var ceil = Math.ceil;
@@ -10882,7 +10882,7 @@ function clipAntimeridianIntersect(lambda0, phi0, lambda1, phi1) {
       cosPhi1,
       sinLambda0Lambda1 = sin$1(lambda0 - lambda1);
   return abs$1(sinLambda0Lambda1) > epsilon$1
-      ? atan$1((sin$1(phi0) * (cosPhi1 = cos$1(phi1)) * sin$1(lambda1)
+      ? atan((sin$1(phi0) * (cosPhi1 = cos$1(phi1)) * sin$1(lambda1)
           - sin$1(phi1) * (cosPhi0 = cos$1(phi0)) * sin$1(lambda0))
           / (cosPhi0 * cosPhi1 * sinLambda0Lambda1))
       : (phi0 + phi1) / 2;
@@ -12601,7 +12601,7 @@ function mercatorRaw(lambda, phi) {
 }
 
 mercatorRaw.invert = function(x, y) {
-  return [x, 2 * atan$1(exp(y)) - halfPi$1];
+  return [x, 2 * atan(exp(y)) - halfPi$1];
 };
 
 function mercator() {
@@ -12668,7 +12668,7 @@ function conicConformalRaw(y0, y1) {
       l = atan2$1(x, abs$1(fy)) * sign$1(fy);
     if (fy * n < 0)
       l -= pi$1 * sign$1(x) * sign$1(fy);
-    return [l / n, 2 * atan$1(pow$1(f / r, 1 / n)) - halfPi$1];
+    return [l / n, 2 * atan(pow$1(f / r, 1 / n)) - halfPi$1];
   };
 
   return project;
@@ -12759,7 +12759,7 @@ function gnomonicRaw(x, y) {
   return [cy * sin$1(x) / k, sin$1(y) / k];
 }
 
-gnomonicRaw.invert = azimuthalInvert(atan$1);
+gnomonicRaw.invert = azimuthalInvert(atan);
 
 function gnomonic() {
   return projection(gnomonicRaw)
@@ -12891,7 +12891,7 @@ function stereographicRaw(x, y) {
 }
 
 stereographicRaw.invert = azimuthalInvert(function(z) {
-  return 2 * atan$1(z);
+  return 2 * atan(z);
 });
 
 function stereographic() {
@@ -12905,7 +12905,7 @@ function transverseMercatorRaw(lambda, phi) {
 }
 
 transverseMercatorRaw.invert = function(x, y) {
-  return [-y, 2 * atan$1(exp(x)) - halfPi$1];
+  return [-y, 2 * atan(exp(x)) - halfPi$1];
 };
 
 function transverseMercator() {
@@ -17472,7 +17472,6 @@ function constant$1(x) {
 
 const abs = Math.abs;
 const atan2 = Math.atan2;
-const atan = Math.atan;
 const cos = Math.cos;
 const max = Math.max;
 const min = Math.min;
@@ -17654,7 +17653,7 @@ function arc() {
       gr = sqrt(gcx*gcx + gcy*gcy),
       gr0 = r0 + gr,
       gr1 = r1 + gr,
-      ac = atan(gcx/gcy),
+      ac = (halfPi-atan2(gcy,gcx)), // ac prime really and atan2 save the day !
 
       gb00 = halfPi - a0 -ac,
       gc00 = asin(gr/gr0*sin(gb00)),
@@ -17674,9 +17673,10 @@ function arc() {
       gc11 = asin(gr/gr1*sin(gb11)),
       ga11 = halfPi-gb11-gc11-ac;
                
-      if (gcx && gcy) context.moveTo(gcx+20, gcy),context.arc(gcx, gcy, 20, 0, Math.PI * 2);
-      else context.moveTo(0+10, 0),context.arc(0, 0, 10, 0, Math.PI * 2);
-      console.log(gr, gr0, gr1, ac, gb00, gc00, ga00);
+      //if (gcx && gcy) context.moveTo(gcx+20, gcy),context.arc(gcx, gcy, 20, 0, Math.PI * 2);
+      //else context.moveTo(0+10, 0),context.arc(0, 0, 10, 0, Math.PI * 2);
+      //console.log("gr     gr0    gr1     ac    gb00      gc00     ga00")
+      //console.log(gr.toFixed(4), gr0.toFixed(4), gr1.toFixed(4), ac.toFixed(4), gb00.toFixed(4), gc00.toFixed(4), ga00.toFixed(4))
 
       // Apply padding? Note that since r1 ≥ r0, da1 ≥ da0.
       if (rp > epsilon) {
