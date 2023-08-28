@@ -17648,30 +17648,9 @@ function arc() {
           t0,
           t1;
 
-      // Calculation for Group Padding 
-      const 
-      gr = sqrt(gcx*gcx + gcy*gcy),
-      gr0 = r0 + gr,
-      gr1 = r1 + gr,
-      ac = (halfPi-atan2(gcy,gcx)), // ac prime really and atan2 save the day !
+      
 
-      gb00 = halfPi - a0 -ac,
-      gc00 = asin(gr/gr0*sin(gb00)),
-      ga00 = halfPi-gb00-gc00-ac,
-
-      gb10 = halfPi - a1 -ac,
-      gc10 = asin(gr/gr0*sin(gb10)),
-      ga10 = halfPi-gb10-gc10-ac,
-
-      gb01 = halfPi - a0 -ac,
-      gc01 = asin(gr/gr1*sin(gb01)),
-      ga01 = halfPi-gb01-gc01-ac,
-      ga01x = gcx + gr1 * cos(ga01),
-      ga01y = gcy + gr1 * sin(ga01),
-
-      gb11 = halfPi - a1 -ac,
-      gc11 = asin(gr/gr1*sin(gb11)),
-      ga11 = halfPi-gb11-gc11-ac;
+      
                
       //if (gcx && gcy) context.moveTo(gcx+20, gcy),context.arc(gcx, gcy, 20, 0, Math.PI * 2);
       //else context.moveTo(0+10, 0),context.arc(0, 0, 10, 0, Math.PI * 2);
@@ -17687,6 +17666,30 @@ function arc() {
         if ((da1 -= p1 * 2) > epsilon) p1 *= (cw ? 1 : -1), a01 += p1, a11 -= p1;
         else da1 = 0, a01 = a11 = (a0 + a1) / 2;
       }
+      // Calculation for Group Padding 
+      const 
+      gr = sqrt(gcx*gcx + gcy*gcy),
+      gr0 = r0 + gr,
+      gr1 = r1 + gr,
+      ac = (halfPi-atan2(gcy,gcx)), // ac prime really and atan2 save the day !
+      
+      gb00 = halfPi - a00 -ac,
+      gc00 = asin(gr/gr0*sin(gb00)),
+      ga00 = halfPi-gb00-gc00-ac,
+
+      gb10 = halfPi - a10 -ac,
+      gc10 = asin(gr/gr0*sin(gb10)),
+      ga10 = halfPi-gb10-gc10-ac,
+
+      gb01 = halfPi - a01 -ac,
+      gc01 = asin(gr/gr1*sin(gb01)),
+      ga01 = halfPi-gb01-gc01-ac,
+      ga01x = gcx + gr1 * cos(ga01),
+      ga01y = gcy + gr1 * sin(ga01),
+
+      gb11 = halfPi - a11 -ac,
+      gc11 = asin(gr/gr1*sin(gb11)),
+      ga11 = halfPi-gb11-gc11-ac;
 
       var x01 = r1 * cos(a01),
           y01 = r1 * sin(a01),
